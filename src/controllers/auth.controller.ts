@@ -13,7 +13,7 @@ export const signup: RequestHandler = async (req, res, next) => {
   }: { username: string; email: string; password: string; roles: string[] } =
     req.body;
 
-  const createdUser = await db.users.create({
+  const createdUser = await db.user.create({
     data: {
       username,
       email,
@@ -22,10 +22,10 @@ export const signup: RequestHandler = async (req, res, next) => {
   });
 
   if (roles) {
-    await db.users_Roles.createMany({
+    await db.users_Role.createMany({
       data: roles.map((role) => {
         return {
-          username: createdUser.username,
+          user_id: createdUser.id,
           role_id: Number(role),
         };
       }),
@@ -38,9 +38,9 @@ export const signup: RequestHandler = async (req, res, next) => {
 export const signIn: RequestHandler = async (req, res, next) => {
   const { username, password } = req.body;
 
-  const user = await db.users.findUnique({
+  const user = await db.user.findUnique({
     where: { username },
-    select: { Users_Roles: true, username: true, password: true, email: true },
+    select: { Users_Role: true, username: true, password: true, email: true },
   });
 
   if (!user)
@@ -53,15 +53,17 @@ export const signIn: RequestHandler = async (req, res, next) => {
       .status(401)
       .send({ accessToken: null, msg: 'invalid password!' });
 
-  const ONEDAY = 8400;
-  const token = jwt.sign({ id: user.username }, secret, { expiresIn: ONEDAY });
+  const ONE_DAY_IN_MS = 8400;
+  const token = jwt.sign({ id: user.username }, secret, {
+    expiresIn: ONE_DAY_IN_MS,
+  });
 
   //   const userRoles = await db.users.findUnique({
   //     where: { username },
   //     select: { Users_Roles: true },
   //   });
 
-  const authorities = user.Users_Roles.map((role) => `ROLE_${role.role_id}`);
+  const authorities = user.Users_Role.map((role) => `ROLE_${role.role_id}`);
 
   res.status(200).send({
     username: user.username,
@@ -70,3 +72,5 @@ export const signIn: RequestHandler = async (req, res, next) => {
     accessToken: token,
   });
 };
+
+console.log();

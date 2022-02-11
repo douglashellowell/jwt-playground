@@ -45,14 +45,12 @@ export const isAdmin: RequestHandler = async (req, res, next) => {
   if (!userId) return res.status(400).send({ msg: 'no userId set??' });
 
   // userId or username????
-  const user = await db.users.findUnique({
+  const user = await db.user.findUnique({
     where: { username: userId },
-    select: { username: true, Users_Roles: true },
+    select: { username: true, Users_Role: true },
   });
 
-  const isAdmin = user?.Users_Roles.some(
-    (role) => role.role_id === Roles.ADMIN
-  );
+  const isAdmin = user?.Users_Role.some((role) => role.role_id === Roles.ADMIN);
 
   if (isAdmin) {
     next();

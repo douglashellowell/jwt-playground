@@ -29,7 +29,9 @@
     "dev": "nodemon src/listen.ts",
     "seed": "prisma migrate reset --force",
     "migrate": "prisma migrate dev",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "ts-dev": "tsc --watch",
+    "total-reset": "yarn setup-db && yarn migrate --name=init && yarn seed"
   },
   "prisma": {
     "seed": "ts-node src/db/run-seed.ts"

@@ -10,26 +10,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id       Int    @id @default(autoincrement())
   username String @unique
   email    String
   password String
 
-  Users_Roles Users_Roles[]
+  Users_Role Users_Role[]
 }
 
-model Roles {
-  id          Int           @id
-  name        String
-  Users_Roles Users_Roles[]
+model Role {
+  id         Int          @id
+  name       String
+  Users_Role Users_Role[]
 }
 
-model Users_Roles {
-  user    Users @relation(fields: [user_id], references: [id])
+model Users_Role {
+  user    User @relation(fields: [user_id], references: [id])
   user_id Int
 
-  role    Roles @relation(fields: [role_id], references: [id])
+  role    Role @relation(fields: [role_id], references: [id])
   role_id Int
 
   @@id([user_id, role_id])

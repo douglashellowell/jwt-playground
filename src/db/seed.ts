@@ -1,7 +1,7 @@
 import db from './connection';
 
 async function seed() {
-  await db.roles.createMany({
+  await db.role.createMany({
     data: [
       { id: 1, name: 'admin' },
       { id: 2, name: 'moderator' },
@@ -9,7 +9,7 @@ async function seed() {
     ],
   });
 
-  await db.users.createMany({
+  await db.user.createMany({
     data: [
       { username: 'doug', email: 'doug@hellowell.com', password: 'admin123' },
       { username: 'maryMod', email: 'mary@example.com', password: 'mod123' },
@@ -17,7 +17,7 @@ async function seed() {
     ],
   });
 
-  await db.users_Roles.createMany({
+  await db.users_Role.createMany({
     data: [
       { user_id: 1, role_id: 1 },
       { user_id: 2, role_id: 2 },
