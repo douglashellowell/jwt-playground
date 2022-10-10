@@ -28,6 +28,7 @@ export const verifyToken: RequestHandler = (req, res, next) => {
     }
 
     if (typeof decoded === 'string') {
+      // this might be an error
       req.userId = decoded;
     } else {
       req.userId = decoded.id;

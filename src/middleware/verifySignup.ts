@@ -8,13 +8,13 @@ export const checkDuplicateUser: RequestHandler = async (req, res, next) => {
   // check if user already registered
   if (!username) return res.status(400).send({ msg: 'no user sent' });
 
-  const userFromName = await db.users.findUnique({ where: { username } });
+  const userFromName = await db.user.findUnique({ where: { username } });
 
   if (userFromName) return res.status(400).send({ msg: 'user already exists' });
 
-  // const userFromEmail = await db.users.findUnique({ where: {} });
+  const userFromEmail = await db.user.findMany({ where: { email } });
 
-  // if (userFromEmail) return res.status(400).send({ msg: 'email used!' });
+  if (userFromEmail) return res.status(400).send({ msg: 'email used!' });
   //
 
   next();
